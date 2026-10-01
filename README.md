@@ -53,10 +53,12 @@ Validation được đặt ở service cho dữ liệu nghiệp vụ và ở con
 
 | Đầu vào | Kiểm tra backend |
 |---|---|
-| Đăng ký | Email đúng định dạng và chưa tồn tại; họ tên bắt buộc, tối đa 50 ký tự; mật khẩu tối thiểu 6 ký tự; mật khẩu xác nhận phải trùng. OTP có thời hạn 5 phút và tối đa 5 lần nhập sai. |
+| Đăng ký | Email đúng định dạng và chưa tồn tại; họ tên bắt buộc, tối đa 50 ký tự; mật khẩu từ 6 đến 32 ký tự; mật khẩu xác nhận phải trùng. OTP 6 chữ số, có thời hạn 5 phút và tối đa 5 lần nhập sai. |
 | Giỏ hàng | `bookId`/`quantity` phải parse thành số nguyên; ID sách dương và sách phải tồn tại; thêm/cập nhật số lượng phải từ 1 đến tồn kho. Thêm trùng kiểm tra phần tồn còn lại trước khi cộng để tránh vượt giới hạn số nguyên/tồn kho. |
 | Checkout COD | Trim trước khi kiểm tra: `recipientName` bắt buộc, ≤100 ký tự; `phone` khớp `0\d{9}`; `shippingAddress` bắt buộc, ≤255 ký tự; `note` tùy chọn, ≤500 ký tự. Form sai trả lỗi đúng field và vẫn giữ nguyên dữ liệu nhập. |
-| Review | `bookId` và điểm phải parse hợp lệ; điểm từ 1–5; nội dung không được trống; kiểm tra tài khoản đã đánh giá sách đó chưa. |
+| Review | `bookId` và điểm phải parse hợp lệ; điểm từ 1–5; nội dung sau trim không được trống, tối đa 2000 ký tự; kiểm tra sách tồn tại và tài khoản chưa đánh giá sách đó. |
+| Sách/tác giả | Kiểm tra giới hạn theo cột DB, số và ngày đúng định dạng; ID tác giả phải hợp lệ và tồn tại. Lỗi render lại form theo field, ID tài nguyên thiếu/sai trả 404. |
+| Ảnh bìa | Tối đa 5 MB; MIME phải thuộc JPEG/PNG/GIF/WebP và chữ ký bytes phải khớp định dạng. |
 | Phân trang/lọc đơn | `page` sai hoặc nhỏ hơn 1 thành trang 1, trang vượt tổng được clamp về trang cuối; status không khớp enum được xử lý như `ALL`. |
 | Chuyển trạng thái | ID đơn phải dương, mã đích phải parse thành trạng thái hợp lệ; service kiểm tra transition từ trạng thái hiện tại trước khi repository ghi. |
 
@@ -72,7 +74,7 @@ Các luồng cart/checkout/order dùng cùng quy ước HTML (không tạo JSON 
 | Chưa đăng nhập / không đủ quyền | Checkout và lịch sử redirect `/login`; URL checkout được lưu để tiếp tục sau login. User thường truy cập `/admin/*` nhận HTTP 403. |
 | Không tìm thấy tài nguyên | ID sách sai/không tồn tại trả HTTP 404; đơn không tồn tại được báo lỗi nghiệp vụ ở thao tác cập nhật. |
 
-Quy ước trên được áp dụng cho các luồng mới của giỏ và đơn hàng; các màn hình CRUD cũ vẫn giữ cách xử lý hiện có, không khẳng định toàn bộ ứng dụng dùng một response contract duy nhất.
+Quy ước form HTML được áp dụng cho các luồng đăng nhập/đăng ký, catalog, giỏ hàng, checkout, đánh giá và quản trị. Lỗi nhập liệu render lại form với `errors` theo field; POST hợp lệ redirect kèm flash; ID tài nguyên không tồn tại trả HTTP 404.
 
 ### Nhất quán dữ liệu và an toàn nghiệp vụ
 
@@ -90,7 +92,7 @@ Chạy toàn bộ kiểm thử:
 mvn clean test
 ```
 
-Các test hiện có kiểm tra giới hạn số lượng giỏ, validation checkout, trạng thái đơn, thao tác cart qua Servlet, phản hồi lỗi checkout và bộ lọc đăng nhập/phân quyền. Lần nghiệm thu hiện tại có **10 test đạt, 0 lỗi**. Build WAR bằng `mvn clean package`.
+Các test kiểm tra validation dữ liệu catalog, chữ ký file ảnh, response form, checkout, trạng thái đơn, cart và phân quyền. Lần chạy hiện tại có **18 test đạt, 0 lỗi**. Build WAR bằng `mvn clean package`.
 
 ## Kiến trúc và dữ liệu
 
