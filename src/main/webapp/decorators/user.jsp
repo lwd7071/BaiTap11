@@ -8,7 +8,7 @@
                 <title>
                     ${layoutTitle}
                 </title>
-                <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/app.css?v=20260924-2">
+                <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/app.css?v=20261001-1">
             </head>
             <body>
                 <header class="top">
