@@ -20,7 +20,7 @@ public final class ValidationUtil_24110202 {
     public static Integer integer(String s) {
         try {
             return s == null || s.isBlank() ? null : Integer.valueOf(s.trim());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return null;
         }
     }
@@ -45,13 +45,17 @@ public final class ValidationUtil_24110202 {
 
     public static boolean pastOrToday(String s) {
         LocalDate d = date(s);
-        return d == null || !d.isAfter(LocalDate.now());
+        return s == null || s.isBlank() || d != null && !d.isAfter(LocalDate.now());
+    }
+
+    public static boolean optionalDate(String s) {
+        return s == null || s.isBlank() || date(s) != null;
     }
 
     public static boolean price(String s) {
         try {
             BigDecimal x = new BigDecimal(s.trim());
-            return x.signum() >= 0 && x.compareTo(new BigDecimal("9999.99")) <= 0;
+            return x.signum() >= 0 && x.scale() <= 2 && x.compareTo(new BigDecimal("9999.99")) <= 0;
         } catch (Exception e) {
             return false;
         }
