@@ -5,6 +5,10 @@
     <servlet-mapping><servlet-name>adminBooksWildcard</servlet-name><url-pattern>/admin/books/*</url-pattern></servlet-mapping>
     <servlet><servlet-name>adminAuthorsWildcard</servlet-name><servlet-class>vn.edu.hcmute.bookstore_24110202.controller.AdminAuthorController_24110202</servlet-class></servlet>
     <servlet-mapping><servlet-name>adminAuthorsWildcard</servlet-name><url-pattern>/admin/authors/*</url-pattern></servlet-mapping>
+    <error-page><error-code>403</error-code><location>/error</location></error-page>
+    <error-page><error-code>404</error-code><location>/error</location></error-page>
+    <error-page><error-code>500</error-code><location>/error</location></error-page>
+    <error-page><exception-type>java.lang.Throwable</exception-type><location>/error</location></error-page>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>

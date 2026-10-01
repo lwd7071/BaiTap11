@@ -84,6 +84,19 @@ Quy ước form HTML được áp dụng cho các luồng đăng nhập/đăng k
 - Truy vấn lịch sử user luôn kèm `userId` lấy từ session; người dùng không thể chọn userId tùy ý để đọc đơn tài khoản khác. Dữ liệu filter được bind parameter trong truy vấn JPA.
 - Checkout dùng `FormResult_24110202<T>` cho lỗi field/global; danh sách đơn được lọc và phân trang ở repository, chỉ tải items cho trang đang xem thay vì tải toàn bộ lịch sử.
 
+## Xử lý lỗi HTTP và logging
+
+- `web.xml` định tuyến HTTP 403, 404, 500 và exception chưa xử lý tới `/error`.
+- `ErrorController_24110202` giữ mã HTTP, đặt thông báo thân thiện rồi forward tới `/WEB-INF/views/error.jsp`. Trang không hiển thị chi tiết exception.
+- Exception chưa xử lý được ghi bằng `java.util.logging` (JUL) ở mức `SEVERE`, kèm stack trace và URI request; lỗi HTTP thông thường như 403/404 không bị log như lỗi server.
+- Luồng: Servlet/filter gọi `sendError(...)` hoặc ném exception → container áp dụng error-page mapping → `/error` đọc thuộc tính lỗi chuẩn Servlet → log exception nếu có → forward JSP với status ban đầu.
+
+| HTTP status | Nội dung |
+|---|---|
+| 403 | Không có quyền truy cập |
+| 404 | Không tìm thấy trang hoặc tài nguyên |
+| 500 | Sự cố máy chủ; chi tiết chỉ có trong log server |
+
 ## Kiểm tra và test
 
 Chạy toàn bộ kiểm thử:
