@@ -1,12 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
         <title>Xác thực email | Book Store</title>
-        <form class="form-card" method="post" action="${pageContext.request.contextPath}/verify-otp">
+        <form class="form-card" method="post" action="${fn:escapeXml(pageContext.request.contextPath)}/verify-otp"><input type="hidden" name="csrfToken" value="${fn:escapeXml(sessionScope.csrfToken)}">
             <div class="eyebrow">Kiểm tra hộp thư</div>
             <h1>Xác thực email</h1>
             <p>Nhập mã 6 chữ số đã gửi tới địa chỉ email đăng ký. Mã có hiệu lực 5 phút.</p>
             <c:if test="${not empty message}">
-                <div class="notice errorbox">${message}</div>
+                <div class="notice errorbox">${fn:escapeXml(message)}</div>
             </c:if>
             <div class="field">
                 <label for="otp">Mã OTP</label>

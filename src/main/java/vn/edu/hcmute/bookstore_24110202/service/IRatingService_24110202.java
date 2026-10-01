@@ -1,1 +1,10 @@
-package vn.edu.hcmute.bookstore_24110202.service; import java.util.*; public interface IRatingService_24110202 { List<Object[]> reviews(int bookId); long count(int bookId); boolean exists(int userId,int bookId); void save(int userId,int bookId,int rating,String text); }
+package vn.edu.hcmute.bookstore_24110202.service;
+
+import java.util.List;
+
+public interface IRatingService_24110202 {
+    List<Object[]> reviews(int bookId);
+    long count(int bookId);
+    boolean exists(int userId, int bookId);
+    void save(int userId, int bookId, int rating, String text);
+}

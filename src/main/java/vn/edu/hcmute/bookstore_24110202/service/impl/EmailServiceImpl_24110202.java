@@ -1,2 +1,52 @@
-package vn.edu.hcmute.bookstore_24110202.service.impl; import jakarta.mail.*; import jakarta.mail.internet.*; import java.util.*; import vn.edu.hcmute.bookstore_24110202.service.IEmailService_24110202;
-public class EmailServiceImpl_24110202 implements IEmailService_24110202 { public void sendOtp(String to,String otp){String user=System.getenv("MAIL_USERNAME"),pass=System.getenv("MAIL_APP_PASSWORD");if(user==null||pass==null||user.isBlank()||pass.isBlank())throw new IllegalStateException("Chưa cấu hình email");if(pass!=null)pass=pass.replace(" ","").trim();final String fPass=pass;Properties p=new Properties();p.put("mail.smtp.host","smtp.gmail.com");p.put("mail.smtp.port","587");p.put("mail.smtp.auth","true");p.put("mail.smtp.starttls.enable","true");Session s=Session.getInstance(p,new Authenticator(){protected PasswordAuthentication getPasswordAuthentication(){return new PasswordAuthentication(user,fPass);}});try{Message m=new MimeMessage(s);m.setFrom(new InternetAddress(user));m.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to));m.setSubject("Mã xác thực Book Store");m.setText("Mã OTP của bạn là: "+otp);Transport.send(m);}catch(MessagingException e){throw new IllegalStateException("Không thể gửi email OTP",e);}} }
+package vn.edu.hcmute.bookstore_24110202.service.impl;
+
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import java.util.Properties;
+import vn.edu.hcmute.bookstore_24110202.service.IEmailService_24110202;
+
+public class EmailServiceImpl_24110202 implements IEmailService_24110202 {
+
+    @Override
+    public void sendOtp(String to, String otp) {
+        String user = System.getenv("MAIL_USERNAME");
+        String pass = System.getenv("MAIL_APP_PASSWORD");
+        if (user == null || pass == null || user.isBlank() || pass.isBlank()) {
+            throw new IllegalStateException("Chưa cấu hình email");
+        }
+        if (pass != null) {
+            pass = pass.replace(" ", "").trim();
+        }
+        final String fPass = pass;
+
+        Properties p = new Properties();
+        p.put("mail.smtp.host", "smtp.gmail.com");
+        p.put("mail.smtp.port", "587");
+        p.put("mail.smtp.auth", "true");
+        p.put("mail.smtp.starttls.enable", "true");
+
+        Session s = Session.getInstance(p, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, fPass);
+            }
+        });
+
+        try {
+            Message m = new MimeMessage(s);
+            m.setFrom(new InternetAddress(user));
+            m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            m.setSubject("Mã xác thực Book Store");
+            m.setText("Mã OTP của bạn là: " + otp);
+            Transport.send(m);
+        } catch (MessagingException e) {
+            throw new IllegalStateException("Không thể gửi email OTP", e);
+        }
+    }
+}

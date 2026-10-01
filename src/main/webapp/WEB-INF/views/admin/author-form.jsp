@@ -1,16 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <title>${empty author ? 'Thêm tác giả' : 'Sửa tác giả'}</title>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
+        <title>${fn:escapeXml(empty author ? 'Thêm tác giả' : 'Sửa tác giả')}</title>
         <p>
-        <a href="${pageContext.request.contextPath}/admin/authors">← Danh sách tác giả</a>
+        <a href="${fn:escapeXml(pageContext.request.contextPath)}/admin/authors">← Danh sách tác giả</a>
     </p>
-    <form class="form-card" method="post" action="${pageContext.request.contextPath}/admin/authors">
-        <h1>${empty author ? 'Thêm tác giả' : 'Sửa tác giả'}</h1>
+    <form class="form-card" method="post" action="${fn:escapeXml(pageContext.request.contextPath)}/admin/authors"><input type="hidden" name="csrfToken" value="${fn:escapeXml(sessionScope.csrfToken)}">
+        <h1>${fn:escapeXml(empty author ? 'Thêm tác giả' : 'Sửa tác giả')}</h1>
         <c:if test="${not empty errors}">
             <div class="notice errorbox"><c:out value="${not empty message ? message : 'Vui lòng kiểm tra dữ liệu.'}"/></div>
         </c:if>
-        <input type="hidden" name="action" value="${empty author ? 'create' : 'edit'}">
-        <input type="hidden" name="id" value="${author.id}">
+        <input type="hidden" name="action" value="${fn:escapeXml(empty author ? 'create' : 'edit')}">
+        <input type="hidden" name="id" value="${fn:escapeXml(author.id)}">
         <div class="field">
             <label for="name">Tên tác giả</label>
             <input id="name" name="name" maxlength="100" value="<c:out value='${param.name ne null ? param.name : author.name}'/>" required>

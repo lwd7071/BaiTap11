@@ -5,7 +5,7 @@ GO
 IF OBJECT_ID('dbo.users','U') IS NULL CREATE TABLE dbo.users (
  id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_users PRIMARY KEY,
  email varchar(50) NOT NULL CONSTRAINT UQ_users_email UNIQUE,
- fullname nvarchar(50) NULL, phone int NULL, passwd varchar(32) NOT NULL,
+ fullname nvarchar(50) NULL, phone int NULL, passwd varchar(255) NOT NULL,
  signup_date datetime NULL CONSTRAINT DF_users_signup DEFAULT GETDATE(), last_login datetime NULL,
  is_admin bit NULL CONSTRAINT DF_users_admin DEFAULT 0);
 IF OBJECT_ID('dbo.books','U') IS NULL CREATE TABLE dbo.books (
@@ -23,6 +23,10 @@ IF OBJECT_ID('dbo.rating','U') IS NULL CREATE TABLE dbo.rating (
  userid int NOT NULL, bookid int NOT NULL, rating tinyint NULL, review_text text NULL,
  CONSTRAINT PK_rating PRIMARY KEY(userid,bookid), CONSTRAINT FK_rating_users FOREIGN KEY(userid) REFERENCES dbo.users(id),
  CONSTRAINT FK_rating_books FOREIGN KEY(bookid) REFERENCES dbo.books(bookid), CONSTRAINT CK_rating_range CHECK(rating IS NULL OR rating BETWEEN 1 AND 5));
+GO
+
+IF COL_LENGTH('dbo.users','passwd') < 255
+    ALTER TABLE dbo.users ALTER COLUMN passwd varchar(255) NOT NULL;
 GO
 
 -- Cap nhat lai cac cot text/varchar sang nvarchar de luu tieng Viet khong bi dau cham hoi ?
@@ -70,8 +74,8 @@ IF NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_order_items_order' AND ob
  CREATE INDEX IX_order_items_order ON dbo.order_items(order_id);
 GO
 
-IF NOT EXISTS(SELECT 1 FROM dbo.users WHERE email='admin@example.com') INSERT dbo.users(email,fullname,passwd,is_admin) VALUES('admin@example.com',N'Admin Demo','0e7517141fb53f21ee439b355b5a1d0a',1);
-IF NOT EXISTS(SELECT 1 FROM dbo.users WHERE email='user@example.com') INSERT dbo.users(email,fullname,passwd,is_admin) VALUES('user@example.com',N'User Demo','448ddd517d3abb70045aea6929f02367',0);
+IF NOT EXISTS(SELECT 1 FROM dbo.users WHERE email='admin@example.com') INSERT dbo.users(email,fullname,passwd,is_admin) VALUES('admin@example.com',N'Admin Demo','pbkdf2-sha256$600000$ABEiM0RVZneImaq7zN3u_w$AaHk-UVknnxZcRvLtnkNlgOiEWF-uzwIGZisEz-u5D8',1);
+IF NOT EXISTS(SELECT 1 FROM dbo.users WHERE email='user@example.com') INSERT dbo.users(email,fullname,passwd,is_admin) VALUES('user@example.com',N'User Demo','pbkdf2-sha256$600000$_-7dzLuqmYh3ZlVEMyIRAA$li8LoLvgjQWJT8jAuJk6dPqIZ_yl55mZFAyJNM1oKNM',0);
 GO
 IF NOT EXISTS(SELECT 1 FROM dbo.author WHERE author_name='Nguyen Nhat Anh') INSERT dbo.author(author_name,date_of_birth) VALUES ('Nguyen Nhat Anh','1955-05-07');
 IF NOT EXISTS(SELECT 1 FROM dbo.author WHERE author_name='To Hoai') INSERT dbo.author(author_name,date_of_birth) VALUES ('To Hoai','1920-09-27');

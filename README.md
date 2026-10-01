@@ -84,6 +84,13 @@ Quy ước form HTML được áp dụng cho các luồng đăng nhập/đăng k
 - Truy vấn lịch sử user luôn kèm `userId` lấy từ session; người dùng không thể chọn userId tùy ý để đọc đơn tài khoản khác. Dữ liệu filter được bind parameter trong truy vấn JPA.
 - Checkout dùng `FormResult_24110202<T>` cho lỗi field/global; danh sách đơn được lọc và phân trang ở repository, chỉ tải items cho trang đang xem thay vì tải toàn bộ lịch sử.
 
+### Bảo mật đầu ra và phiên
+
+- Dữ liệu động trong JSP được escape bằng `fn:escapeXml` hoặc `<c:out>`, bao gồm nội dung đánh giá, tên người dùng và dữ liệu catalog. URL ảnh bìa chỉ nhận đường dẫn nội bộ hoặc URL HTTP/HTTPS hợp lệ.
+- Tất cả form POST dùng token CSRF ngẫu nhiên gắn với session. Token thiếu hoặc sai bị từ chối bằng HTTP 403 trước khi controller xử lý; logout hủy session cùng token.
+- Sau khi xác thực đăng nhập, ứng dụng đổi session ID trước khi lưu tài khoản vào session. Dữ liệu session cần cho chuyển tiếp sau đăng nhập, như URL checkout, được giữ lại.
+- Mật khẩu mới được băm bằng PBKDF2-HMAC-SHA256 với salt ngẫu nhiên 16 byte và 600.000 vòng lặp. Tài khoản đang lưu MD5 vẫn đăng nhập được; sau lần đăng nhập đúng, hash được nâng cấp trong database. Script SQL mở rộng `users.passwd` lên `varchar(255)` và tạo hash PBKDF2 cho tài khoản demo mới.
+
 ## Xử lý lỗi HTTP và logging
 
 - `web.xml` định tuyến HTTP 403, 404, 500 và exception chưa xử lý tới `/error`.
@@ -105,11 +112,11 @@ Chạy toàn bộ kiểm thử:
 mvn clean test
 ```
 
-Các test kiểm tra validation dữ liệu catalog, chữ ký file ảnh, response form, checkout, trạng thái đơn, cart và phân quyền. Lần chạy hiện tại có **18 test đạt, 0 lỗi**. Build WAR bằng `mvn clean package`.
+Các test kiểm tra validation dữ liệu catalog, chữ ký file ảnh, response form, checkout, trạng thái đơn, cart, phân quyền, CSRF, đổi session ID khi đăng nhập và nâng cấp hash mật khẩu. Lần chạy `mvn clean package` gần nhất có **32 test đạt, 0 lỗi**.
 
 ## Kiến trúc và dữ liệu
 
-- **Presentation:** Jakarta Servlet, JSP/JSTL và bộ lọc đăng nhập, phân quyền, thông báo.
+- **Presentation:** Jakarta Servlet, JSP/JSTL và bộ lọc CSRF, đăng nhập, phân quyền, thông báo.
 - **Business:** Service kiểm tra dữ liệu và điều phối nghiệp vụ.
 - **Data access:** Repository/JPA Entity với Hibernate.
 - **Database:** SQL Server; các bảng chính gồm `users`, `books`, `author`, `book_author`, `rating`, `orders` và `order_items`.
@@ -137,7 +144,7 @@ Các test kiểm tra validation dữ liệu catalog, chữ ký file ảnh, respo
 
 **Yêu cầu:** JDK 21, Maven 3.9+, SQL Server và Apache Tomcat 11.
 
-1. Mở `database/bookstore_24110202.sql` trong SSMS và chạy script để tạo database, bảng và dữ liệu mẫu. Script không xóa database hoặc dữ liệu hiện có.
+1. Mở `database/bookstore_24110202.sql` trong SSMS và chạy script để tạo database, bảng và dữ liệu mẫu. Script không xóa database hoặc dữ liệu hiện có; khi chạy trên database cũ, script mở rộng cột hash mật khẩu mà không xóa tài khoản.
 2. Cấu hình thông tin kết nối trước khi khởi động Tomcat:
 
    ```powershell

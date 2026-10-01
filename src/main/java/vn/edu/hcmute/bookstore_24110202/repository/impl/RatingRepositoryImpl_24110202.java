@@ -1,2 +1,60 @@
-package vn.edu.hcmute.bookstore_24110202.repository.impl; import jakarta.persistence.*; import java.util.*; import vn.edu.hcmute.bookstore_24110202.config.JpaConfig_24110202; import vn.edu.hcmute.bookstore_24110202.entity.*; import vn.edu.hcmute.bookstore_24110202.repository.RatingRepository_24110202;
-public class RatingRepositoryImpl_24110202 implements RatingRepository_24110202 { private <T>T r(java.util.function.Function<EntityManager,T> f){EntityManager m=JpaConfig_24110202.createEntityManager();try{return f.apply(m);}finally{m.close();}} public List<Object[]> findForBook(int id){return r(m->m.createNativeQuery("select u.fullname,r.review_text,r.rating from rating r join users u on u.id=r.userid where r.bookid=? order by r.userid").setParameter(1,id).getResultList());} public long countForBook(int id){return r(m->((Number)m.createNativeQuery("select count(*) from rating where bookid=?").setParameter(1,id).getSingleResult()).longValue());} public boolean exists(int u,int b){return r(m->((Number)m.createNativeQuery("select count(*) from rating where userid=? and bookid=?").setParameter(1,u).setParameter(2,b).getSingleResult()).intValue()>0);} public void save(int u,int b,int rating,String text){EntityManager m=JpaConfig_24110202.createEntityManager();try{m.getTransaction().begin();m.persist(new Rating_24110202(new RatingId_24110202(u,b),rating,text));m.getTransaction().commit();}finally{m.close();}} }
+package vn.edu.hcmute.bookstore_24110202.repository.impl;
+
+import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.function.Function;
+
+import vn.edu.hcmute.bookstore_24110202.config.JpaConfig_24110202;
+import vn.edu.hcmute.bookstore_24110202.entity.RatingId_24110202;
+import vn.edu.hcmute.bookstore_24110202.entity.Rating_24110202;
+import vn.edu.hcmute.bookstore_24110202.repository.RatingRepository_24110202;
+
+public class RatingRepositoryImpl_24110202 implements RatingRepository_24110202 {
+
+    private <T> T r(Function<EntityManager, T> f) {
+        EntityManager m = JpaConfig_24110202.createEntityManager();
+        try {
+            return f.apply(m);
+        } finally {
+            m.close();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Object[]> findForBook(int id) {
+        return r(m -> m.createNativeQuery(
+                "select u.fullname, r.review_text, r.rating from rating r " +
+                "join users u on u.id = r.userid " +
+                "where r.bookid = ? order by r.userid")
+                .setParameter(1, id)
+                .getResultList());
+    }
+
+    @Override
+    public long countForBook(int id) {
+        return r(m -> ((Number) m.createNativeQuery("select count(*) from rating where bookid = ?")
+                .setParameter(1, id)
+                .getSingleResult()).longValue());
+    }
+
+    @Override
+    public boolean exists(int u, int b) {
+        return r(m -> ((Number) m.createNativeQuery("select count(*) from rating where userid = ? and bookid = ?")
+                .setParameter(1, u)
+                .setParameter(2, b)
+                .getSingleResult()).intValue() > 0);
+    }
+
+    @Override
+    public void save(int u, int b, int rating, String text) {
+        EntityManager m = JpaConfig_24110202.createEntityManager();
+        try {
+            m.getTransaction().begin();
+            m.persist(new Rating_24110202(new RatingId_24110202(u, b), rating, text));
+            m.getTransaction().commit();
+        } finally {
+            m.close();
+        }
+    }
+}

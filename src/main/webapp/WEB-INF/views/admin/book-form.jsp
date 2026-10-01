@@ -1,16 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <title>${empty book ? 'Thêm sách' : 'Sửa sách'}</title>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
+        <title>${fn:escapeXml(empty book ? 'Thêm sách' : 'Sửa sách')}</title>
         <p>
-        <a href="${pageContext.request.contextPath}/admin/books">← Danh sách sách</a>
+        <a href="${fn:escapeXml(pageContext.request.contextPath)}/admin/books">← Danh sách sách</a>
     </p>
-    <form class="form-card wide" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/books">
-        <h1>${empty book ? 'Thêm sách' : 'Sửa sách'}</h1>
+    <form class="form-card wide" method="post" enctype="multipart/form-data" action="${fn:escapeXml(pageContext.request.contextPath)}/admin/books"><input type="hidden" name="csrfToken" value="${fn:escapeXml(sessionScope.csrfToken)}">
+        <h1>${fn:escapeXml(empty book ? 'Thêm sách' : 'Sửa sách')}</h1>
         <c:if test="${not empty errors}">
             <div class="notice errorbox"><c:out value="${errors.form ne null ? errors.form : (errors.coverFile ne null ? errors.coverFile : message)}"/></div>
         </c:if>
-        <input type="hidden" name="action" value="${empty book ? 'create' : 'edit'}">
-        <input type="hidden" name="id" value="${book.bookid}">
+        <input type="hidden" name="action" value="${fn:escapeXml(empty book ? 'create' : 'edit')}">
+        <input type="hidden" name="id" value="${fn:escapeXml(book.bookid)}">
         <div class="field">
             <label for="isbn">ISBN</label>
             <input id="isbn" name="isbn" value="<c:out value='${param.isbn ne null ? param.isbn : book.isbn}'/>" required>
@@ -70,7 +72,7 @@
                             <c:set var="authorSelected" value="true"/>
                         </c:if>
                     </c:forEach>
-                    <option value="${a.id}"${authorSelected ? ' selected' : ''}>${a.name}</option>
+                    <option value="${fn:escapeXml(a.id)}"${fn:escapeXml(authorSelected ? ' selected' : '')}>${fn:escapeXml(a.name)}</option>
                 </c:forEach>
             </select>
             <small class="error"><c:out value="${errors.authorIds}"/></small>

@@ -45,4 +45,18 @@ class CatalogValidationTest_24110202 {
         assertThrows(IllegalArgumentException.class, () -> ratings.save(1, 1, 0, "review"));
         assertThrows(IllegalArgumentException.class, () -> ratings.save(1, 1, 5, "x".repeat(2001)));
     }
+
+    @Test void rejectsUnsafeCoverUrlSchemesAndProtocolRelativeHosts() {
+        BookForm_24110202 form = new BookForm_24110202();
+        form.setIsbn("1");
+        form.setTitle("Safe book");
+        form.setPrice("1.00");
+        form.setQuantity("1");
+        form.setCoverImage("javascript:alert(1)");
+        assertTrue(books.validate(form).getFieldErrors().containsKey("coverImage"));
+        form.setCoverImage("//attacker.example/image.svg");
+        assertTrue(books.validate(form).getFieldErrors().containsKey("coverImage"));
+        form.setCoverImage("https://images.example/book.jpg");
+        assertFalse(books.validate(form).getFieldErrors().containsKey("coverImage"));
+    }
 }

@@ -8,12 +8,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
+import vn.edu.hcmute.bookstore_24110202.service.IUserService_24110202;
 import vn.edu.hcmute.bookstore_24110202.service.impl.UserServiceImpl_24110202;
 import vn.edu.hcmute.bookstore_24110202.util.ValidationUtil_24110202;
 
 @WebServlet("/login")
 public class LoginController_24110202 extends HttpServlet {
-    private final UserServiceImpl_24110202 service = new UserServiceImpl_24110202();
+    private final IUserService_24110202 service;
+
+    public LoginController_24110202() { this(new UserServiceImpl_24110202()); }
+    public LoginController_24110202(IUserService_24110202 service) { this.service = service; }
 
     @Override protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,7 +37,8 @@ public class LoginController_24110202 extends HttpServlet {
             doGet(request, response);
             return;
         }
-        HttpSession session = request.getSession(true);
+        request.changeSessionId();
+        HttpSession session = request.getSession(false);
         session.setAttribute("currentUser", user);
         String destination = (String) session.getAttribute("postLoginRedirect");
         session.removeAttribute("postLoginRedirect");

@@ -1,6 +1,8 @@
 package vn.edu.hcmute.bookstore_24110202.util;
 
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
@@ -64,6 +66,25 @@ public final class ValidationUtil_24110202 {
     public static boolean rating(String s) {
         Integer x = integer(s);
         return x != null && x >= 1 && x <= 5;
+    }
+
+    public static boolean safeImageUrl(String value) {
+        if (value == null || value.isBlank()) return true;
+        try {
+            String trimmed = value.trim();
+            URI uri = new URI(trimmed);
+            if (uri.isAbsolute()) {
+                String scheme = uri.getScheme();
+                return ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
+                        && uri.getHost() != null && uri.getUserInfo() == null;
+            }
+            String path = uri.getPath();
+            return uri.getRawAuthority() == null && path != null && !path.startsWith("//")
+                    && !path.equals("..") && !path.startsWith("../") && !path.contains("/../")
+                    && !trimmed.contains("\\") && trimmed.chars().noneMatch(Character::isISOControl);
+        } catch (URISyntaxException e) {
+            return false;
+        }
     }
 
     public static int totalPages(long total, int size) {

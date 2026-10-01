@@ -30,6 +30,8 @@ public class BookServiceImpl_24110202 implements IBookService_24110202 {
         if (!ValidationUtil_24110202.optionalDate(form.getPublishDate())) result.addError("publishDate", "Ngày xuất bản không hợp lệ");
         if (form.getCoverImage() != null && form.getCoverImage().trim().length() > 200)
             result.addError("coverImage", "Đường dẫn ảnh tối đa 200 ký tự");
+        else if (!ValidationUtil_24110202.safeImageUrl(form.getCoverImage()))
+            result.addError("coverImage", "Đường dẫn ảnh phải thuộc ứng dụng hoặc dùng URL HTTP/HTTPS hợp lệ");
         String[] authorIds = form.getAuthorIds();
         if (authorIds != null) {
             Set<Integer> uniqueIds = new HashSet<>();

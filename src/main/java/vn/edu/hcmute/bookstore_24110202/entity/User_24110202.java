@@ -23,7 +23,7 @@ public class User_24110202 {
 
     private Integer phone;
 
-    @Column(name = "passwd", nullable = false, length = 32)
+    @Column(name = "passwd", nullable = false, length = 255)
     private String passwd;
 
     @Column(name = "signup_date")

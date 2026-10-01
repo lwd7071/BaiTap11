@@ -1,1 +1,10 @@
-package vn.edu.hcmute.bookstore_24110202.repository; import java.util.*; public interface RatingRepository_24110202 { List<Object[]> findForBook(int bookId); long countForBook(int bookId); boolean exists(int userId,int bookId); void save(int userId,int bookId,int rating,String text); }
+package vn.edu.hcmute.bookstore_24110202.repository;
+
+import java.util.List;
+
+public interface RatingRepository_24110202 {
+    List<Object[]> findForBook(int bookId);
+    long countForBook(int bookId);
+    boolean exists(int userId, int bookId);
+    void save(int userId, int bookId, int rating, String text);
+}
