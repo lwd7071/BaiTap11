@@ -1,0 +1,10 @@
+target/
+.idea/
+.vscode/
+*.iml
+*.log
+Thumbs.db
+.DS_Store
+src/main/webapp/uploads/*
+!src/main/webapp/uploads/.gitkeep
+!src/main/webapp/uploads/README.txt

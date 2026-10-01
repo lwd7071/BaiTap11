@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" version="6.0" metadata-complete="false">
+    <display-name>Book Store 24110202</display-name>
+    <servlet><servlet-name>adminBooksWildcard</servlet-name><servlet-class>vn.edu.hcmute.bookstore_24110202.controller.AdminBookController_24110202</servlet-class></servlet>
+    <servlet-mapping><servlet-name>adminBooksWildcard</servlet-name><url-pattern>/admin/books/*</url-pattern></servlet-mapping>
+    <servlet><servlet-name>adminAuthorsWildcard</servlet-name><servlet-class>vn.edu.hcmute.bookstore_24110202.controller.AdminAuthorController_24110202</servlet-class></servlet>
+    <servlet-mapping><servlet-name>adminAuthorsWildcard</servlet-name><url-pattern>/admin/authors/*</url-pattern></servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>home</welcome-file>
+    </welcome-file-list>
+</web-app>
