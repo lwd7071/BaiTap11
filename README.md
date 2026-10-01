@@ -55,7 +55,7 @@ Validation được đặt ở service cho dữ liệu nghiệp vụ và ở con
 |---|---|
 | Đăng ký | Email đúng định dạng và chưa tồn tại; họ tên bắt buộc, tối đa 50 ký tự; mật khẩu tối thiểu 6 ký tự; mật khẩu xác nhận phải trùng. OTP có thời hạn 5 phút và tối đa 5 lần nhập sai. |
 | Giỏ hàng | `bookId`/`quantity` phải parse thành số nguyên; ID sách dương và sách phải tồn tại; thêm/cập nhật số lượng phải từ 1 đến tồn kho. Thêm trùng kiểm tra phần tồn còn lại trước khi cộng để tránh vượt giới hạn số nguyên/tồn kho. |
-| Checkout COD | Trim trước khi kiểm tra: `recipientName` bắt buộc, ≤100 ký tự; `phone` khớp `0\\d{9}`; `shippingAddress` bắt buộc, ≤255 ký tự; `note` tùy chọn, ≤500 ký tự. Form sai trả lỗi đúng field và vẫn giữ nguyên dữ liệu nhập. |
+| Checkout COD | Trim trước khi kiểm tra: `recipientName` bắt buộc, ≤100 ký tự; `phone` khớp `0\d{9}`; `shippingAddress` bắt buộc, ≤255 ký tự; `note` tùy chọn, ≤500 ký tự. Form sai trả lỗi đúng field và vẫn giữ nguyên dữ liệu nhập. |
 | Review | `bookId` và điểm phải parse hợp lệ; điểm từ 1–5; nội dung không được trống; kiểm tra tài khoản đã đánh giá sách đó chưa. |
 | Phân trang/lọc đơn | `page` sai hoặc nhỏ hơn 1 thành trang 1, trang vượt tổng được clamp về trang cuối; status không khớp enum được xử lý như `ALL`. |
 | Chuyển trạng thái | ID đơn phải dương, mã đích phải parse thành trạng thái hợp lệ; service kiểm tra transition từ trạng thái hiện tại trước khi repository ghi. |
