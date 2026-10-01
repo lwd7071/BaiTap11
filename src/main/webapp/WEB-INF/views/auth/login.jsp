@@ -8,12 +8,12 @@
                 <div class="notice errorbox">${message}</div>
             </c:if>
             <div class="field">
-                <label>Email</label>
-                <input type="email" name="email" maxlength="50" value="<c:out value='${email}'/>" required>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" maxlength="50" value="<c:out value='${email}'/>" required>
             </div>
             <div class="field">
-                <label>Mật khẩu</label>
-                <input type="password" name="password" required>
+                <label for="password">Mật khẩu</label>
+                <input id="password" type="password" name="password" required>
             </div>
             <button class="button primary">Đăng nhập</button>
             <p class="auth-links">Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register">Đăng ký</a>

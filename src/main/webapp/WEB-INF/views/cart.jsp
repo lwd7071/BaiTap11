@@ -11,7 +11,7 @@
         <section class="panel"><p>Giỏ hàng đang trống.</p><a class="button" href="${pageContext.request.contextPath}/home">Tiếp tục mua sắm</a></section>
     </c:when>
     <c:otherwise>
-        <div class="table-wrap"><table>
+        <div class="table-wrap"><table class="cart-table">
             <thead><tr><th>Sách</th><th>Đơn giá</th><th>Số lượng</th><th>Thành tiền</th><th></th></tr></thead>
             <tbody>
                 <c:forEach var="row" items="${cartItems}">

@@ -8,28 +8,28 @@
                 <div class="notice errorbox">${message}</div>
             </c:if>
             <div class="field">
-                <label>Email</label>
-                <input type="email" name="email" maxlength="50" value="<c:out value='${param.email}'/>" required>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" maxlength="50" value="<c:out value='${param.email}'/>" required>
                 <small class="error"><c:out value="${errors.email}"/></small>
             </div>
             <div class="field">
-                <label>Họ tên</label>
-                <input name="fullname" maxlength="50" value="<c:out value='${param.fullname}'/>" required>
+                <label for="fullname">Họ tên</label>
+                <input id="fullname" name="fullname" maxlength="50" value="<c:out value='${param.fullname}'/>" required>
                 <small class="error"><c:out value="${errors.fullname}"/></small>
             </div>
             <div class="field">
-                <label>Điện thoại</label>
-                <input name="phone" inputmode="numeric" value="<c:out value='${param.phone}'/>"/>
+                <label for="phone">Điện thoại</label>
+                <input id="phone" name="phone" inputmode="numeric" value="<c:out value='${param.phone}'/>"/>
                 <small class="error"><c:out value="${errors.phone}"/></small>
             </div>
             <div class="field">
-                <label>Mật khẩu</label>
-                <input type="password" name="password" minlength="6" maxlength="32" required>
+                <label for="password">Mật khẩu</label>
+                <input id="password" type="password" name="password" minlength="6" maxlength="32" required>
                 <small class="error"><c:out value="${errors.password}"/></small>
             </div>
             <div class="field">
-                <label>Nhập lại mật khẩu</label>
-                <input type="password" name="confirmPassword" required>
+                <label for="confirmPassword">Nhập lại mật khẩu</label>
+                <input id="confirmPassword" type="password" name="confirmPassword" required>
                 <small class="error"><c:out value="${errors.confirmPassword}"/></small>
             </div>
             <button class="button primary">Gửi mã xác thực</button>

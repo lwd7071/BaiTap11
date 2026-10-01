@@ -25,7 +25,7 @@
         <p>${book.description}</p>
     </div>
 </section>
-<section class="panel" style="margin-top:28px">
+<section class="panel section-gap">
     <h2>Đánh giá từ độc giả</h2>
     <c:forEach var="review" items="${reviews}">
         <p>
@@ -40,8 +40,8 @@
             <form method="post" action="${pageContext.request.contextPath}/rating/create">
                 <input type="hidden" name="bookId" value="${book.bookid}">
                 <div class="field">
-                    <label>Điểm số</label>
-                    <select name="rating" required>
+                    <label for="rating">Điểm số</label>
+                    <select id="rating" name="rating" required>
                         <option value="">Chọn điểm</option>
                         <option>5</option>
                         <option>4</option>
@@ -51,8 +51,8 @@
                     </select>
                 </div>
                 <div class="field">
-                    <label>Nội dung</label>
-                    <textarea name="reviewText" maxlength="2000" required>
+                    <label for="reviewText">Nội dung</label>
+                    <textarea id="reviewText" name="reviewText" maxlength="2000" required>
                     </textarea>
                 </div>
                 <button class="button primary">Gửi đánh giá</button>
