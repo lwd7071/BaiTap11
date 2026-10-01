@@ -4,7 +4,7 @@
         <p>
         <a href="${pageContext.request.contextPath}/admin/books">← Danh sách sách</a>
     </p>
-    <form class="form-card" style="max-width:760px" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/books">
+    <form class="form-card wide" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/books">
         <h1>${empty book ? 'Thêm sách' : 'Sửa sách'}</h1>
         <c:if test="${not empty errors}">
             <div class="notice errorbox"><c:out value="${errors.form ne null ? errors.form : (errors.coverFile ne null ? errors.coverFile : message)}"/></div>
@@ -12,52 +12,52 @@
         <input type="hidden" name="action" value="${empty book ? 'create' : 'edit'}">
         <input type="hidden" name="id" value="${book.bookid}">
         <div class="field">
-            <label>ISBN</label>
-            <input name="isbn" value="<c:out value='${param.isbn ne null ? param.isbn : book.isbn}'/>" required>
+            <label for="isbn">ISBN</label>
+            <input id="isbn" name="isbn" value="<c:out value='${param.isbn ne null ? param.isbn : book.isbn}'/>" required>
             <small class="error"><c:out value="${errors.isbn}"/></small>
         </div>
         <div class="field">
-            <label>Tiêu đề</label>
-            <input name="title" maxlength="200" value="<c:out value='${param.title ne null ? param.title : book.title}'/>" required>
+            <label for="title">Tiêu đề</label>
+            <input id="title" name="title" maxlength="200" value="<c:out value='${param.title ne null ? param.title : book.title}'/>" required>
             <small class="error"><c:out value="${errors.title}"/></small>
         </div>
         <div class="field">
-            <label>Nhà xuất bản</label>
-            <input name="publisher" maxlength="100" value="<c:out value='${param.publisher ne null ? param.publisher : book.publisher}'/>"/>
+            <label for="publisher">Nhà xuất bản</label>
+            <input id="publisher" name="publisher" maxlength="100" value="<c:out value='${param.publisher ne null ? param.publisher : book.publisher}'/>"/>
             <small class="error"><c:out value="${errors.publisher}"/></small>
         </div>
         <div class="field">
-            <label>Giá</label>
-            <input name="price" type="number" min="0" max="9999.99" step="0.01" value="<c:out value='${param.price ne null ? param.price : book.price}'/>" required>
+            <label for="price">Giá</label>
+            <input id="price" name="price" type="number" min="0" max="9999.99" step="0.01" value="<c:out value='${param.price ne null ? param.price : book.price}'/>" required>
             <small class="error"><c:out value="${errors.price}"/></small>
         </div>
         <div class="field">
-            <label>Số lượng</label>
-            <input name="quantity" type="number" min="0" value="<c:out value='${param.quantity ne null ? param.quantity : book.quantity}'/>" required>
+            <label for="quantity">Số lượng</label>
+            <input id="quantity" name="quantity" type="number" min="0" value="<c:out value='${param.quantity ne null ? param.quantity : book.quantity}'/>" required>
             <small class="error"><c:out value="${errors.quantity}"/></small>
         </div>
         <div class="field">
-            <label>Ngày xuất bản</label>
-            <input name="publishDate" type="date" value="<c:out value='${param.publishDate ne null ? param.publishDate : book.publishDate}'/>"/>
+            <label for="publishDate">Ngày xuất bản</label>
+            <input id="publishDate" name="publishDate" type="date" value="<c:out value='${param.publishDate ne null ? param.publishDate : book.publishDate}'/>"/>
             <small class="error"><c:out value="${errors.publishDate}"/></small>
         </div>
         <div class="field">
-            <label>Đường dẫn ảnh</label>
-            <input name="coverImage" maxlength="200" value="<c:out value='${param.coverImage ne null ? param.coverImage : book.coverImage}'/>"/>
+            <label for="coverImage">Đường dẫn ảnh</label>
+            <input id="coverImage" name="coverImage" maxlength="200" value="<c:out value='${param.coverImage ne null ? param.coverImage : book.coverImage}'/>"/>
             <small class="error"><c:out value="${errors.coverImage}"/></small>
         </div>
         <div class="field">
-            <label>Hoặc tải ảnh bìa lên</label>
-            <input type="file" name="coverFile" accept="image/jpeg,image/png,image/gif,image/webp">
+            <label for="coverFile">Hoặc tải ảnh bìa lên</label>
+            <input id="coverFile" type="file" name="coverFile" accept="image/jpeg,image/png,image/gif,image/webp">
             <small>JPEG, PNG, GIF hoặc WebP; tối đa 5 MB. Ảnh tải lên sẽ được ưu tiên hơn đường dẫn phía trên.</small>
         </div>
         <div class="field">
-            <label>Mô tả</label>
-            <textarea name="description"><c:out value="${param.description ne null ? param.description : book.description}"/></textarea>
+            <label for="description">Mô tả</label>
+            <textarea id="description" name="description"><c:out value="${param.description ne null ? param.description : book.description}"/></textarea>
         </div>
         <div class="field">
-            <label>Tác giả (giữ Ctrl để chọn nhiều)</label>
-            <select name="authorIds" multiple size="6">
+            <label for="authorIds">Tác giả (giữ Ctrl để chọn nhiều)</label>
+            <select id="authorIds" name="authorIds" multiple size="6">
                 <c:forEach var="a" items="${authors}">
                     <c:set var="authorSelected" value="false"/>
                 <c:forEach var="selectedAuthorId" items="${paramValues.authorIds}">
@@ -77,13 +77,13 @@
         </div>
         <div class="form-grid two-columns">
             <div class="field">
-                <label>Tên tác giả mới (nếu chưa có trong danh sách)</label>
-                <input name="newAuthorName" maxlength="100" value="<c:out value='${param.newAuthorName}'/>"/>
+                <label for="newAuthorName">Tên tác giả mới (nếu chưa có trong danh sách)</label>
+                <input id="newAuthorName" name="newAuthorName" maxlength="100" value="<c:out value='${param.newAuthorName}'/>"/>
                 <small class="error"><c:out value="${errors.newAuthorName}"/></small>
             </div>
             <div class="field">
-                <label>Ngày sinh tác giả mới</label>
-                <input type="date" name="newAuthorDateOfBirth" value="<c:out value='${param.newAuthorDateOfBirth}'/>"/>
+                <label for="newAuthorDateOfBirth">Ngày sinh tác giả mới</label>
+                <input id="newAuthorDateOfBirth" type="date" name="newAuthorDateOfBirth" value="<c:out value='${param.newAuthorDateOfBirth}'/>"/>
                 <small class="error"><c:out value="${errors.newAuthorDateOfBirth}"/></small>
             </div>
         </div>

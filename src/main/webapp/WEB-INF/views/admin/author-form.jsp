@@ -12,13 +12,13 @@
         <input type="hidden" name="action" value="${empty author ? 'create' : 'edit'}">
         <input type="hidden" name="id" value="${author.id}">
         <div class="field">
-            <label>Tên tác giả</label>
-            <input name="name" maxlength="100" value="<c:out value='${param.name ne null ? param.name : author.name}'/>" required>
+            <label for="name">Tên tác giả</label>
+            <input id="name" name="name" maxlength="100" value="<c:out value='${param.name ne null ? param.name : author.name}'/>" required>
             <small class="error"><c:out value="${errors.name}"/></small>
         </div>
         <div class="field">
-            <label>Ngày sinh</label>
-            <input name="dateOfBirth" type="date" value="<c:out value='${param.dateOfBirth ne null ? param.dateOfBirth : author.dateOfBirth}'/>"/>
+            <label for="dateOfBirth">Ngày sinh</label>
+            <input id="dateOfBirth" name="dateOfBirth" type="date" value="<c:out value='${param.dateOfBirth ne null ? param.dateOfBirth : author.dateOfBirth}'/>"/>
             <small class="error"><c:out value="${errors.dateOfBirth}"/></small>
         </div>
         <button class="button primary">Lưu tác giả</button>
