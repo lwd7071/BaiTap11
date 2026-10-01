@@ -1,0 +1,8 @@
+<sitemesh>
+    <dispatch-mode>include</dispatch-mode>
+    <decorator-selector>org.sitemesh.config.PathBasedDecoratorSelector</decorator-selector>
+    <mapping path="/decorators/*" exclude="true" />
+    <mapping path="/assets/*" exclude="true" />
+    <mapping path="/admin/*" decorator="/decorators/admin.jsp" />
+    <mapping path="/*" decorator="/decorators/user.jsp" />
+</sitemesh>
