@@ -9,7 +9,7 @@
             </c:if>
             <div class="field">
                 <label>Email</label>
-                <input type="email" name="email" maxlength="50" value="${email}" required>
+                <input type="email" name="email" maxlength="50" value="<c:out value='${email}'/>" required>
             </div>
             <div class="field">
                 <label>Mật khẩu</label>

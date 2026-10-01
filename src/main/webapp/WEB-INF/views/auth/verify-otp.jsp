@@ -11,6 +11,7 @@
             <div class="field">
                 <label>Mã OTP</label>
                 <input name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required>
+                <small class="error"><c:out value="${errors.otp}"/></small>
             </div>
             <button class="button primary">Xác nhận</button>
         </form>

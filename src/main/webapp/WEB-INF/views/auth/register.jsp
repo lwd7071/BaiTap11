@@ -9,28 +9,28 @@
             </c:if>
             <div class="field">
                 <label>Email</label>
-                <input type="email" name="email" maxlength="50" value="${param.email}" required>
-                <small class="error">${errors.email}</small>
+                <input type="email" name="email" maxlength="50" value="<c:out value='${param.email}'/>" required>
+                <small class="error"><c:out value="${errors.email}"/></small>
             </div>
             <div class="field">
                 <label>Họ tên</label>
-                <input name="fullname" maxlength="50" value="${param.fullname}" required>
-                <small class="error">${errors.fullname}</small>
+                <input name="fullname" maxlength="50" value="<c:out value='${param.fullname}'/>" required>
+                <small class="error"><c:out value="${errors.fullname}"/></small>
             </div>
             <div class="field">
                 <label>Điện thoại</label>
-                <input name="phone" inputmode="numeric" value="${param.phone}">
-                <small class="error">${errors.phone}</small>
+                <input name="phone" inputmode="numeric" value="<c:out value='${param.phone}'/>"/>
+                <small class="error"><c:out value="${errors.phone}"/></small>
             </div>
             <div class="field">
                 <label>Mật khẩu</label>
                 <input type="password" name="password" minlength="6" maxlength="32" required>
-                <small class="error">${errors.password}</small>
+                <small class="error"><c:out value="${errors.password}"/></small>
             </div>
             <div class="field">
                 <label>Nhập lại mật khẩu</label>
                 <input type="password" name="confirmPassword" required>
-                <small class="error">${errors.confirmPassword}</small>
+                <small class="error"><c:out value="${errors.confirmPassword}"/></small>
             </div>
             <button class="button primary">Gửi mã xác thực</button>
             <p class="auth-links">
