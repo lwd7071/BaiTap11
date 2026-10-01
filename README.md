@@ -43,7 +43,7 @@ Khi checkout, hệ thống kiểm tra lại sách, giá và tồn kho trong data
 | `CANCELLED` | Đơn hàng hủy |
 | `RETURNED` | Đơn hàng hoàn |
 
-Admin chuyển đơn theo thứ tự xử lý; có thể hủy trước khi vận chuyển và chỉ chuyển sang hoàn sau khi đã giao. Để thử bộ lọc lịch sử, có thể sửa status trực tiếp trong SSMS bằng một trong các mã trên. Cách này chỉ đổi trạng thái hiển thị, không tự hoàn tồn kho.
+Admin chuyển đơn theo thứ tự xử lý; có thể hủy trước khi vận chuyển và chỉ chuyển sang hoàn sau khi đã giao. Khi hủy qua trang quản trị, tồn kho được hoàn lại cùng transaction với trạng thái đơn. Để thử bộ lọc lịch sử, có thể sửa status trực tiếp trong SSMS bằng một trong các mã trên; cập nhật trực tiếp chỉ đổi trạng thái hiển thị và không chạy nghiệp vụ hoàn tồn kho.
 
 ## Điểm nổi bật phía backend
 
@@ -79,6 +79,7 @@ Quy ước form HTML được áp dụng cho các luồng đăng nhập/đăng k
 ### Nhất quán dữ liệu và an toàn nghiệp vụ
 
 - Tạo đơn, tạo các dòng hàng và trừ tồn kho nằm trong cùng transaction. Repository khóa sách khi đọc, kiểm tra lại số lượng và dùng cập nhật có điều kiện `quantity >= số lượng đặt`; nếu bất kỳ dòng nào thất bại, transaction rollback toàn bộ.
+- Hủy đơn trước khi vận chuyển khóa đơn và các sách liên quan, cộng lại số lượng từng dòng rồi cập nhật trạng thái trong cùng transaction. Khóa đơn ngăn hủy lặp và hoàn kho hai lần; nếu không thể cộng tồn kho an toàn, toàn bộ thay đổi rollback. Chuyển sang `RETURNED` chỉ cập nhật trạng thái vì chưa có bước xác nhận hàng đã nhận lại.
 - Giá, tên sách, tổng tiền, phương thức `COD` và trạng thái ban đầu `NEW` do backend xác định. `order_items` lưu snapshot tên và đơn giá, giúp lịch sử không đổi khi thông tin catalog được cập nhật sau này.
 - Cập nhật trạng thái đơn cũng khóa bản ghi và kiểm tra transition trước khi ghi; ràng buộc database giới hạn các mã status hợp lệ.
 - Truy vấn lịch sử user luôn kèm `userId` lấy từ session; người dùng không thể chọn userId tùy ý để đọc đơn tài khoản khác. Dữ liệu filter được bind parameter trong truy vấn JPA.
@@ -112,7 +113,7 @@ Chạy toàn bộ kiểm thử:
 mvn clean test
 ```
 
-Các test kiểm tra validation dữ liệu catalog, chữ ký file ảnh, response form, checkout, trạng thái đơn, cart, phân quyền, CSRF, đổi session ID khi đăng nhập và nâng cấp hash mật khẩu. Lần chạy `mvn clean package` gần nhất có **32 test đạt, 0 lỗi**.
+Các test kiểm tra validation dữ liệu catalog, chữ ký file ảnh, response form, checkout, trạng thái đơn, cart, phân quyền, CSRF, đổi session ID khi đăng nhập và nâng cấp hash mật khẩu. Lần chạy `mvn clean package` gần nhất có **35 test đạt, 0 lỗi**.
 
 ## Kiến trúc và dữ liệu
 

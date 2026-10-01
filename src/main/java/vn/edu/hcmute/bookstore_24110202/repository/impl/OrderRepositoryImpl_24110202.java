@@ -88,6 +88,19 @@ public class OrderRepositoryImpl_24110202 implements OrderRepository_24110202 {
             Order_24110202 order = em.find(Order_24110202.class, orderId, LockModeType.PESSIMISTIC_WRITE);
             if (order == null) throw new NoSuchElementException("Không tìm thấy đơn hàng");
             if (!order.getStatus().canTransitionTo(target)) throw new IllegalArgumentException("Không thể chuyển trạng thái đơn hàng");
+            if (target == OrderStatus_24110202.CANCELLED) {
+                for (OrderItem_24110202 item : order.getItems()) {
+                    Book_24110202 referencedBook = item.getBook();
+                    if (referencedBook == null) continue;
+                    Book_24110202 book = em.find(Book_24110202.class, referencedBook.getBookid(), LockModeType.PESSIMISTIC_WRITE);
+                    if (book == null) continue;
+                    Integer stock = book.getQuantity();
+                    int quantity = item.getQuantity();
+                    if (stock == null || stock < 0 || quantity < 1 || stock > Integer.MAX_VALUE - quantity)
+                        throw new IllegalStateException("Không thể hoàn tồn kho cho sách " + item.getBookTitle());
+                    book.setQuantity(stock + quantity);
+                }
+            }
             order.setStatus(target);
             order.setUpdatedAt(LocalDateTime.now());
             em.getTransaction().commit();
